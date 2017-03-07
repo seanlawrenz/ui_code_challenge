@@ -11,12 +11,18 @@
 		<label for="last_name">Last Name</label><input type="text" name="last_name" id="last_name">
 		<label for="first_name">Frist Name</label><input type="text" name="first_name" id="first_name">
 		<label for="email_address">Email Address</label><input type="text" name="email_address" id="email_address">
-		<label for="specitity">Specitity</label><input type="text" name="specitity" id="specitity">
+		<label for="specialty">Specitity</label><input type="text" name="specialty" id="specialty">
 		<label for="practice_name">Practice</label><input type="text" name="practice_name" id="practice_name">
 		<input type="submit" value="Submit">
 	</form>
 </div>
 <hr>
+	<select id="sort-provider">
+		<option selected="" disabled="" hidden="" style="display: none;" value="">Sort By</option>
+		<option value="last_name">Last name</option>
+		<option value="specialty">Specitity</option>
+		<option value="practice_name">Name of practice</option>
+	</select>
 <div id="provider-list">
 </div>
 <button id="remove-provider">Remove</button>

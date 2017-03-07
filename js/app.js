@@ -10,16 +10,16 @@ var existingData = [
 
 //Mother Provider Object
 function Provider(lastName, firstName, emailAddress, specialty, practiceName){
-	this.lastName = lastName;
-	this.firstName = firstName;
-	this.emailAddress = emailAddress;
+	this.last_name = lastName;
+	this.first_name = firstName;
+	this.email_address = emailAddress;
 	this.specialty = specialty;
-	this.practiceName = practiceName;
+	this.practice_name = practiceName;
 }
 
 //Adding to DOM
 Provider.prototype.addProvider = function(){
-	var html = '<div><input type="checkbox" id="'+ this.emailAddress +'"><p class="large-bold">'+ this.lastName + ',' + this.firstName + '</p><p class="16-point">' + this.specialty + '</p><p>' + this.emailAddress + '</p><p>' + this.practiceName + '</p></div>';
+	var html = '<div><input type="checkbox" id="'+ this.email_address +'"><p class="large-bold">'+ this.last_name + ',' + this.first_name + '</p><p class="16-point">' + this.specialty + '</p><p>' + this.email_address + '</p><p>' + this.practice_name + '</p></div>';
 	$('#provider-list').append(html);
 }
 
@@ -47,7 +47,7 @@ function loadProviders(data){
 	});
 }
 
-//Create provider form submit
+//create provider form submit
 $('#create_provider').submit((e)=>{
 	e.preventDefault();
 	//grabbing values. 
@@ -60,12 +60,13 @@ $('#create_provider').submit((e)=>{
 	let createdProvider = new Provider(lastName, firstName, emailAddress, specialty, practiceName);
 	createdProvider.addProvider();
 	//Adding to local Storage
-	existingData = localStorage.getItem('providerData');
+	existingData = JSON.parse(localStorage.getItem('providerData'));
 	existingData.push(createdProvider);
-	loadExistingProviders(existingData);
+	loadLocalStorage(existingData);
+	loadProviders(existingData);
 });
 
-//Removeing Provider
+//removeing Provider
 $('#remove-provider').click(function(){
 	$('#provider-list input:checked').each(function(){
 		var id = $(this).attr('id');
@@ -77,6 +78,22 @@ $('#remove-provider').click(function(){
 		$(this).parent().remove();
 		loadLocalStorage(existingData);
 	});
+});
+
+//sorting 
+function sortingProviders(prop){
+	existingData = JSON.parse(localStorage.getItem('providerData'));
+	existingData.sort((a,b)=>{
+		return (a[prop] > b[prop]);
+	});
+	loadProviders(existingData);
+}
+
+//Events
+//sort by
+$('#sort-provider').change(()=>{
+	var value = $('#sort-provider').val();
+	sortingProviders(value)
 });
 
 //Doc ready
