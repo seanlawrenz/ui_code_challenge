@@ -35,7 +35,9 @@ function loadLocalStorage(data){
 
 //DOM controller
 function loadProviders(data){
+	//DOM removal
 	$('#provider-list div').remove();
+	//Check to see if this is an init or a sort
 	if (typeof data === 'undefined'){
 		var data = JSON.parse(localStorage.getItem('providerData'));
 	}

@@ -6,26 +6,39 @@
 	<link rel="stylesheet" type="text/css" href="css/styles.css">
 </head>
 <body>
-<div>
-	<form id="create_provider">
-		<label for="last_name">Last Name</label><input type="text" name="last_name" id="last_name">
-		<label for="first_name">Frist Name</label><input type="text" name="first_name" id="first_name">
-		<label for="email_address">Email Address</label><input type="text" name="email_address" id="email_address">
-		<label for="specialty">Specitity</label><input type="text" name="specialty" id="specialty">
-		<label for="practice_name">Practice</label><input type="text" name="practice_name" id="practice_name">
-		<input type="submit" value="Submit">
-	</form>
+<div id="wrapper">
+	<div class="main">
+		<h1>Provider Directory</h1>
+		<p>v2.0</p>
+		<div class="container">
+			<div id="form-div" class="content">
+				<div>
+					<h2>Create Provider</h2>
+					<form id="create_provider">
+						<label for="last_name">Last Name</label><input type="text" name="last_name" id="last_name">
+						<label for="first_name">Frist Name</label><input type="text" name="first_name" id="first_name">
+						<label for="email_address">Email Address</label><input type="text" name="email_address" id="email_address">
+						<label for="specialty">Specitity</label><input type="text" name="specialty" id="specialty">
+						<label for="practice_name">Practice</label><input type="text" name="practice_name" id="practice_name">
+						<input type="submit" value="Submit">
+					</form>
+				</div>
+			</div>
+			<div id="info-div" class="content">
+				<h2>Provider List</h2>
+				<select id="sort-provider">
+					<option selected="" disabled="" hidden="" style="display: none;" value="">Sort By</option>
+					<option value="last_name">Last name</option>
+					<option value="specialty">Specitity</option>
+					<option value="practice_name">Name of practice</option>
+				</select>
+				<div id="provider-list">
+				</div>
+				<button id="remove-provider">Remove</button>
+			</div>
+		</div>
+	</div>
 </div>
-<hr>
-	<select id="sort-provider">
-		<option selected="" disabled="" hidden="" style="display: none;" value="">Sort By</option>
-		<option value="last_name">Last name</option>
-		<option value="specialty">Specitity</option>
-		<option value="practice_name">Name of practice</option>
-	</select>
-<div id="provider-list">
-</div>
-<button id="remove-provider">Remove</button>
 <script type="text/javascript" src="js/jquery.js"></script>
 <script type="text/javascript" src="js/app.js"></script>
 </body>
