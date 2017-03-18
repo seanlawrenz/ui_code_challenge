@@ -8,6 +8,31 @@ var existingData = [
     {"last_name": "Juday", "first_name": "Tobin", "email_address": "tjuday@updox.com", "specialty": "General Medicine", "practice_name": "Juday Family Practice"}
 ];
 
+//Form input info with validation
+var FormInputs = {
+	last_name:{
+		message:'Please enter the provider\'s last name',
+		domLocation:'#last_name'
+	},
+	first_name:{
+		message:'Please enter the provider\'s first name',
+		domLocation:'#first_name'
+	},
+	email_address:{
+		message:'Please enter the provider\'s email',
+		domLocation:'#email_address'
+	},
+	specialty:{
+		message:'Please enter the provider\'s specialty',
+		domLocation:'#specialty'
+	},
+	practice_name:{
+		message:'Please enter the provider\'s practice name',
+		domLocation:'#practice_name'
+	}
+}
+
+
 //Mother Provider Object
 function Provider(lastName, firstName, emailAddress, specialty, practiceName){
 	this.last_name = lastName;
@@ -19,8 +44,15 @@ function Provider(lastName, firstName, emailAddress, specialty, practiceName){
 
 //Adding to DOM
 Provider.prototype.addProvider = function(){
-	var html = '<div><input type="checkbox" id="'+ this.email_address +'"><p class="large-bold">'+ this.last_name + ',' + this.first_name + '</p><p class="16-point">' + this.specialty + '</p><p>' + this.email_address + '</p><p>' + this.practice_name + '</p></div>';
+	var html = '<tr><td><label><input type="checkbox" id="'+ this.email_address +'"></label></td><td align="left"><p class="name">'+ this.last_name + ',' + this.first_name + '</p>' + this.email_address + '</td><td>' + this.specialty + '<br>' + this.practice_name + '</td></tr>'; 
 	$('#provider-list').append(html);
+}
+
+
+//Form Validation
+function formValidation(str){
+	var lettersNumbersReg = new RegExp(/^[A-Za-z0-9!@#$%^&.*()_ ]{1,40}$/);
+	return lettersNumbersReg.test(str);
 }
 
 //JSON loading to local storage
@@ -36,7 +68,7 @@ function loadLocalStorage(data){
 //DOM controller
 function loadProviders(data){
 	//DOM removal
-	$('#provider-list div').remove();
+	$('#provider-list tr').remove();
 	//Check to see if this is an init or a sort
 	if (typeof data === 'undefined'){
 		var data = JSON.parse(localStorage.getItem('providerData'));
@@ -53,19 +85,46 @@ function loadProviders(data){
 $('#create_provider').submit((e)=>{
 	e.preventDefault();
 	//grabbing values. 
-	let lastName = $('#last_name').val();
-	let firstName = $('#first_name').val();
-	let emailAddress = $('#email_address').val();
-	let specialty = $('#specialty').val();
-	let practiceName = $('#practice_name').val();
+	let lastName = $(FormInputs.last_name.domLocation).val();
+	let firstName = $(FormInputs.first_name.domLocation).val();
+	let emailAddress = $(FormInputs.email_address.domLocation).val();
+	let specialty = $(FormInputs.specialty.domLocation).val();
+	let practiceName = $(FormInputs.practice_name.domLocation).val();
+	var error = '';
+	//Checking form inputs
+	if(formValidation(lastName) === false){
+		error += '<li>' + FormInputs.last_name.message + '</li>';
+	}
+	if(formValidation(firstName) === false){
+		error += '<li>' + FormInputs.first_name.message + '</li>';
+	}
+	if(formValidation(emailAddress) === false){
+		error += '<li>' + FormInputs.email_address.message + '</li>';
+	}
+	if(formValidation(specialty) === false){
+		error += '<li>' + FormInputs.specialty.message + '</li>';
+	}
+	if(formValidation(practiceName) === false){
+		error += '<li>' + FormInputs.practice_name.message + '</li>';
+	}
 
-	let createdProvider = new Provider(lastName, firstName, emailAddress, specialty, practiceName);
-	createdProvider.addProvider();
-	//Adding to local Storage
-	existingData = JSON.parse(localStorage.getItem('providerData'));
-	existingData.push(createdProvider);
-	loadLocalStorage(existingData);
-	loadProviders(existingData);
+	if (error == ''){
+		let createdProvider = new Provider(lastName, firstName, emailAddress, specialty, practiceName);
+		createdProvider.addProvider();
+		//Adding to local Storage
+		existingData = JSON.parse(localStorage.getItem('providerData'));
+		existingData.push(createdProvider);
+		loadLocalStorage(existingData);
+		loadProviders(existingData);
+		//resorting with the new provider
+		var value = $('#sort-provider').val();
+		sortingProviders(value)
+	} else{
+		//displaying the error messages
+		$('#error').remove();
+		$('.container').prepend('<div id="error"><ul>' + error + '</ul></div>');
+	}
+	
 });
 
 //removeing Provider
@@ -77,7 +136,7 @@ $('#remove-provider').click(function(){
 				data.removed = true;
 			}
 		});
-		$(this).parent().remove();
+		$(this).parent().parent().parent().remove();
 		loadLocalStorage(existingData);
 	});
 });
